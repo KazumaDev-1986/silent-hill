@@ -1,0 +1,6 @@
+# folders
+assets/
+
+#files
+*.o
+.DS_Store
