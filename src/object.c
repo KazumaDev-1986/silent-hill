@@ -1,5 +1,6 @@
 #include "includes/object.h"
 #include "includes/error.h"
+#include "includes/objects/cube.h"
 #include "includes/raylib.h"
 #include <stdlib.h>
 
@@ -13,8 +14,7 @@ extern "C" {
 
 __AC__ static struct Object *_createObjectByType(struct Object *obj,
                                                  enum ObjectType type);
-
-__AC__ void _destroyObject(struct Object *const obj);
+__AC__ static void _destroyObject(struct Object *const obj);
 
 #if defined(__cplusplus)
 }
@@ -58,6 +58,8 @@ __AC__ static struct Object *_createObjectByType(struct Object *obj,
   case AC_PLANE_OBJECT:
     break;
   case AC_CUBE_OBJECT:
+    obj->node = createCube((Vector3){0}, (Vector3){1.0f, 1.0f, 1.0f}, RED);
+    obj->type = type;
     break;
   default:
     break;
@@ -70,6 +72,7 @@ __AC__ void updateObject(struct Object *const obj) {
   case AC_PLANE_OBJECT:
     break;
   case AC_CUBE_OBJECT:
+    updateCube(obj->node, NULL);
     break;
   default:
     break;
@@ -80,16 +83,18 @@ __AC__ void drawObject(const struct Object *const obj) {
   case AC_PLANE_OBJECT:
     break;
   case AC_CUBE_OBJECT:
+    drawCube(obj->node);
     break;
   default:
     break;
   }
 }
-__AC__ void _destroyObject(struct Object *const obj) {
+__AC__ static void _destroyObject(struct Object *const obj) {
   switch (obj->type) {
   case AC_PLANE_OBJECT:
     break;
   case AC_CUBE_OBJECT:
+    destroyCube((struct Cube **)&obj->node);
     break;
   default:
     break;

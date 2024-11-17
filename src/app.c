@@ -13,11 +13,8 @@ extern "C" {
 #endif
 
 __AC__ static void _initApp(void);
-
 __AC__ static void _destroyApp(struct App *const app);
-
 __AC__ static void _updateApp(struct App *app);
-
 __AC__ static void _drawApp(const struct App *const app);
 
 #if defined(__cplusplus)
@@ -35,7 +32,7 @@ __AC__ struct App *createApp(void) {
   }
 
   app->live = true;
-  app->currentScreen = createMenuScreen();
+  app->currentScreen = createLevel0Screen();
   if (!app->currentScreen) {
     free(app);
     app = NULL;
@@ -57,7 +54,7 @@ __AC__ void destroyApp(struct App **const ptr) {
   if (*ptr) {
     _destroyApp(*ptr);
     free(*ptr);
-    *ptr = NULL;
+    (*ptr) = NULL;
   }
 }
 //----------------------------------------------------------------------------------

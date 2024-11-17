@@ -26,6 +26,10 @@ __AC__ void destroyScreen(struct Screen **const ptr);
 __AC__ struct Screen *createMenuScreen(void);
 __AC__ void destroyMenuScreen(struct Screen **const ptr);
 
+// Level_0 Screen.
+__AC__ struct Screen *createLevel0Screen(void);
+__AC__ void destroyLevel0Screen(struct Screen **const ptr);
+
 #if defined(__cplusplus)
 }
 #endif

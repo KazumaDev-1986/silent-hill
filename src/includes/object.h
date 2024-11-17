@@ -19,12 +19,10 @@ struct Object {
 extern "C" {
 #endif
 
+// Object functions.
 __AC__ struct Object *createObject(enum ObjectType type);
-
 __AC__ void updateObject(struct Object *const obj);
-
 __AC__ void drawObject(const struct Object *const obj);
-
 __AC__ void destroyObject(struct Object **const ptr);
 
 #if defined(__cplusplus)
