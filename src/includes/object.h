@@ -3,6 +3,7 @@
 
 #include "config.h"
 #include "objects/cube.h"
+#include "objects/plane.h"
 #include "raylib.h"
 #include <stddef.h>
 
@@ -20,11 +21,15 @@ struct Object {
 extern "C" {
 #endif
 
-// Object functions.
 __AC__ struct Object *createCubeObject(Vector3 position, Vector3 size,
                                        Color color,
                                        void (*update)(struct Cube *const),
                                        void (*draw)(const struct Cube *const));
+
+__AC__ struct Object *
+createPlaneObject(Vector3 center, Vector2 size, Color color,
+                  void (*update)(struct Plane *const),
+                  void (*draw)(const struct Plane *const));
 __AC__ void updateObject(struct Object *const obj);
 __AC__ void drawObject(const struct Object *const obj);
 __AC__ void destroyObject(struct Object **const ptr);

@@ -35,8 +35,6 @@ __AC__ void updateCube(struct Cube *const cube) {
 __AC__ void drawCube(const struct Cube *const cube) {
   if (cube && cube->_draw) {
     cube->_draw(cube);
-    // DrawCubeV(cube->position, cube->size, cube->color);
-    // DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
   }
 }
 

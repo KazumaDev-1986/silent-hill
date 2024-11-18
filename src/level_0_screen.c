@@ -26,6 +26,7 @@ __AC__ static void _destroyCamera(Camera **const ptr);
 __AC__ static void _destroyAllObjects(struct List **const ptr);
 __AC__ static void _resetIntervalVariables(void);
 
+__AC__ static void _drawPlane(const struct Plane *const plane);
 __AC__ static void _drawCube(const struct Cube *const cube);
 __AC__ static void _rotationCube(const struct Cube *const cube);
 
@@ -59,14 +60,18 @@ __AC__ struct Screen *createLevel0Screen(void) {
   screen->objects = NULL;
 
   addElementList(&screen->objects,
-                 createCubeObject((Vector3){0}, (Vector3){1.0f, 1.0f, 1.0f},
-                                  RED, NULL, &_rotationCube));
-  addElementList(&screen->objects, createCubeObject((Vector3){2.0f, 0.0f, 0.0f},
+                 createPlaneObject((Vector3){0.0f, 0.5f, 0.0f},
+                                   (Vector2){9.0f, 9.0f}, GREEN, NULL,
+                                   &_drawPlane));
+  addElementList(&screen->objects, createCubeObject((Vector3){0.0f, 1.0f, 0.0f},
+                                                    (Vector3){1.0f, 1.0f, 1.0f},
+                                                    RED, NULL, &_rotationCube));
+  addElementList(&screen->objects, createCubeObject((Vector3){2.0f, 1.0f, 0.0f},
                                                     (Vector3){1.0f, 1.0f, 1.0f},
                                                     BLUE, NULL, &_drawCube));
   addElementList(&screen->objects,
-                 createCubeObject((Vector3){-2.0f, 0.0f, 0.0f},
-                                  (Vector3){1.0f, 1.0f, 1.0f}, GREEN, NULL,
+                 createCubeObject((Vector3){-2.0f, 1.0f, 0.0f},
+                                  (Vector3){1.0f, 1.0f, 1.0f}, YELLOW, NULL,
                                   &_drawCube));
 
   return screen;
@@ -105,6 +110,7 @@ __AC__ static void _drawLevel0Screen(const struct Screen *const screen) {
   if (_camera) {
     BeginMode3D(*_camera);
     DrawGrid(10, 1.0f);
+
     if (screen && screen->objects) {
       struct List *tmp = screen->objects;
       while (tmp) {
@@ -114,7 +120,6 @@ __AC__ static void _drawLevel0Screen(const struct Screen *const screen) {
         tmp = tmp->next;
       }
     }
-
     EndMode3D();
   }
 }
@@ -132,7 +137,7 @@ __AC__ static Camera *_createCamera(void) {
   }
 
   camera->fovy = 45.0f;
-  camera->position = (Vector3){10.0f, 10.0f, 0.0f};
+  camera->position = (Vector3){10.0f, 2.0f, 0.0f};
   camera->target = (Vector3){0};
   camera->up = (Vector3){0.0f, 1.0f, 0.0f};
   camera->projection = CAMERA_PERSPECTIVE;
@@ -153,11 +158,16 @@ __AC__ static void _destroyAllObjects(struct List **const ptr) {
       tmp = tmp->next;
     }
   }
+  clearList(&(*ptr));
 }
 __AC__ static void _resetIntervalVariables(void) {
   _destroyCamera(&_camera);
   _nextScreenType = AC_VOID_SCREEN;
 }
+__AC__ static void _drawPlane(const struct Plane *const plane) {
+  DrawPlane(plane->center, plane->size, plane->color);
+}
+
 __AC__ static void _drawCube(const struct Cube *const cube) {
   DrawCubeV(cube->position, cube->size, cube->color);
   DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
