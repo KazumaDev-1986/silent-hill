@@ -11,7 +11,8 @@
 //----------------------------------------------------------------------------------
 
 __AC__ struct Cube *createCube(Vector3 position, Vector3 size, Color color,
-                               void (*callback)(struct Cube *const)) {
+                               void (*update)(struct Cube *const),
+                               void (*draw)(const struct Cube *const)) {
   struct Cube *cube = (struct Cube *)malloc(sizeof(struct Cube));
   if (!cube) {
     printError("struct Cube * failed.");
@@ -21,19 +22,21 @@ __AC__ struct Cube *createCube(Vector3 position, Vector3 size, Color color,
   cube->position = position;
   cube->size = size;
   cube->color = color;
-  cube->_callback = callback;
+  cube->_update = update;
+  cube->_draw = draw;
 
   return cube;
 }
 __AC__ void updateCube(struct Cube *const cube) {
-  if (cube->_callback) {
-    cube->_callback(cube);
+  if (cube->_update) {
+    cube->_update(cube);
   }
 }
 __AC__ void drawCube(const struct Cube *const cube) {
-  if (cube) {
-    DrawCubeV(cube->position, cube->size, cube->color);
-    DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
+  if (cube && cube->_draw) {
+    cube->_draw(cube);
+    // DrawCubeV(cube->position, cube->size, cube->color);
+    // DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
   }
 }
 

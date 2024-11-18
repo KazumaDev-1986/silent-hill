@@ -9,7 +9,8 @@ __AC__ struct Cube {
   Vector3 size;
   Color color;
 
-  void (*_callback)(struct Cube *const);
+  void (*_update)(struct Cube *const);
+  void (*_draw)(const struct Cube *const);
 };
 
 #if defined(__cplusplus)
@@ -17,7 +18,8 @@ extern "C" {
 #endif
 
 __AC__ struct Cube *createCube(Vector3 position, Vector3 size, Color color,
-                               void (*callback)(struct Cube *const));
+                               void (*update)(struct Cube *const),
+                               void (*draw)(const struct Cube *const));
 __AC__ void updateCube(struct Cube *const cube);
 __AC__ void drawCube(const struct Cube *const cube);
 __AC__ void destroyCube(struct Cube **ptr);

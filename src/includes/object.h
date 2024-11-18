@@ -23,7 +23,8 @@ extern "C" {
 // Object functions.
 __AC__ struct Object *createCubeObject(Vector3 position, Vector3 size,
                                        Color color,
-                                       void (*callback)(struct Cube *const));
+                                       void (*update)(struct Cube *const),
+                                       void (*draw)(const struct Cube *const));
 __AC__ void updateObject(struct Object *const obj);
 __AC__ void drawObject(const struct Object *const obj);
 __AC__ void destroyObject(struct Object **const ptr);

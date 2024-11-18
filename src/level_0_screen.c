@@ -7,7 +7,7 @@
 #include "includes/utils.h"
 #include <stdlib.h>
 
-//----------------------------------------------------------------------------------
+//------NULL--------------------------------------------------------------
 // Internal function declaration.
 //----------------------------------------------------------------------------------
 static enum ScreenType _currentScreenType = AC_LEVEL_0_SCREEN;
@@ -25,6 +25,9 @@ __AC__ static Camera *_createCamera(void);
 __AC__ static void _destroyCamera(Camera **const ptr);
 __AC__ static void _destroyAllObjects(struct List **const ptr);
 __AC__ static void _resetIntervalVariables(void);
+
+__AC__ static void _drawCube(const struct Cube *const cube);
+__AC__ static void _rotationCube(const struct Cube *const cube);
 
 #if defined(__cplusplus)
 }
@@ -55,15 +58,16 @@ __AC__ struct Screen *createLevel0Screen(void) {
 
   screen->objects = NULL;
 
-  addElementList(
-      &screen->objects,
-      createCubeObject((Vector3){0}, (Vector3){1.0f, 1.0f, 1.0f}, RED, NULL));
   addElementList(&screen->objects,
-                 createCubeObject((Vector3){2.0f, 0.0f, 0.0f},
-                                  (Vector3){1.0f, 1.0f, 1.0f}, BLUE, NULL));
+                 createCubeObject((Vector3){0}, (Vector3){1.0f, 1.0f, 1.0f},
+                                  RED, NULL, &_rotationCube));
+  addElementList(&screen->objects, createCubeObject((Vector3){2.0f, 0.0f, 0.0f},
+                                                    (Vector3){1.0f, 1.0f, 1.0f},
+                                                    BLUE, NULL, &_drawCube));
   addElementList(&screen->objects,
                  createCubeObject((Vector3){-2.0f, 0.0f, 0.0f},
-                                  (Vector3){1.0f, 1.0f, 1.0f}, GREEN, NULL));
+                                  (Vector3){1.0f, 1.0f, 1.0f}, GREEN, NULL,
+                                  &_drawCube));
 
   return screen;
 }
@@ -153,4 +157,23 @@ __AC__ static void _destroyAllObjects(struct List **const ptr) {
 __AC__ static void _resetIntervalVariables(void) {
   _destroyCamera(&_camera);
   _nextScreenType = AC_VOID_SCREEN;
+}
+__AC__ static void _drawCube(const struct Cube *const cube) {
+  DrawCubeV(cube->position, cube->size, cube->color);
+  DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
+}
+__AC__ static void _rotationCube(const struct Cube *const cube) {
+  static float angle = 0.0f;
+  if (angle > 360) {
+    angle = 0.0f;
+  } else {
+    angle += 1.0f;
+  }
+  rlPushMatrix();
+  rlRotatef(angle, 0.0f, 1.0f, 0.0f);
+
+  DrawCubeV(cube->position, cube->size, cube->color);
+  DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
+
+  rlPopMatrix();
 }

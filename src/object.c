@@ -22,13 +22,14 @@ __AC__ static void _destroyObject(struct Object *const obj);
 //----------------------------------------------------------------------------------
 __AC__ struct Object *createCubeObject(Vector3 position, Vector3 size,
                                        Color color,
-                                       void (*callback)(struct Cube *const)) {
+                                       void (*update)(struct Cube *const),
+                                       void (*draw)(const struct Cube *const)) {
   struct Object *obj = (struct Object *)malloc(sizeof(struct Object));
   if (!obj) {
     return NULL;
   }
 
-  obj->node = createCube(position, size, color, NULL);
+  obj->node = createCube(position, size, color, update, draw);
   if (!obj->node) {
     free(obj);
     obj = NULL;
