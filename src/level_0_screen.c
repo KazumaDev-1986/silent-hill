@@ -2,6 +2,7 @@
 #include "includes/error.h"
 #include "includes/object.h"
 #include "includes/raylib.h"
+#include "includes/rlgl.h"
 #include "includes/screen.h"
 #include "includes/utils.h"
 #include <stdlib.h>
@@ -54,7 +55,15 @@ __AC__ struct Screen *createLevel0Screen(void) {
 
   screen->objects = NULL;
 
-  addElementList(&screen->objects, createObject(AC_CUBE_OBJECT));
+  addElementList(
+      &screen->objects,
+      createCubeObject((Vector3){0}, (Vector3){1.0f, 1.0f, 1.0f}, RED, NULL));
+  addElementList(&screen->objects,
+                 createCubeObject((Vector3){2.0f, 0.0f, 0.0f},
+                                  (Vector3){1.0f, 1.0f, 1.0f}, BLUE, NULL));
+  addElementList(&screen->objects,
+                 createCubeObject((Vector3){-2.0f, 0.0f, 0.0f},
+                                  (Vector3){1.0f, 1.0f, 1.0f}, GREEN, NULL));
 
   return screen;
 }
@@ -79,7 +88,10 @@ __AC__ static void _updateLevel0Screen(struct Screen *const screen) {
   if (screen && screen->objects) {
     struct List *tmp = screen->objects;
     while (tmp) {
-      updateObject((struct Object *)tmp->value);
+      if (tmp->value) {
+        updateObject((struct Object *)tmp->value);
+      }
+
       tmp = tmp->next;
     }
   }
@@ -92,7 +104,9 @@ __AC__ static void _drawLevel0Screen(const struct Screen *const screen) {
     if (screen && screen->objects) {
       struct List *tmp = screen->objects;
       while (tmp) {
-        drawObject((struct Object *)tmp->value);
+        if (tmp->value) {
+          drawObject((struct Object *)tmp->value);
+        }
         tmp = tmp->next;
       }
     }

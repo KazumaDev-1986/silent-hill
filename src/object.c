@@ -1,5 +1,4 @@
 #include "includes/object.h"
-#include "includes/error.h"
 #include "includes/objects/cube.h"
 #include "includes/raylib.h"
 #include <stdlib.h>
@@ -12,8 +11,6 @@
 extern "C" {
 #endif
 
-__AC__ static struct Object *_createObjectByType(struct Object *obj,
-                                                 enum ObjectType type);
 __AC__ static void _destroyObject(struct Object *const obj);
 
 #if defined(__cplusplus)
@@ -23,20 +20,21 @@ __AC__ static void _destroyObject(struct Object *const obj);
 //----------------------------------------------------------------------------------
 // Public function definition.
 //----------------------------------------------------------------------------------
-__AC__ struct Object *createObject(enum ObjectType type) {
+__AC__ struct Object *createCubeObject(Vector3 position, Vector3 size,
+                                       Color color,
+                                       void (*callback)(struct Cube *const)) {
   struct Object *obj = (struct Object *)malloc(sizeof(struct Object));
-
   if (!obj) {
-    printError(TextFormat("struct Object * failed - %d", type));
     return NULL;
   }
 
-  _createObjectByType(obj, type);
+  obj->node = createCube(position, size, color, NULL);
   if (!obj->node) {
     free(obj);
     obj = NULL;
     return NULL;
   }
+  obj->type = AC_CUBE_OBJECT;
 
   return obj;
 }
@@ -52,27 +50,12 @@ __AC__ void destroyObject(struct Object **const ptr) {
 //----------------------------------------------------------------------------------
 // Internal function definition.
 //----------------------------------------------------------------------------------
-__AC__ static struct Object *_createObjectByType(struct Object *obj,
-                                                 enum ObjectType type) {
-  switch (type) {
-  case AC_PLANE_OBJECT:
-    break;
-  case AC_CUBE_OBJECT:
-    obj->node = createCube((Vector3){0}, (Vector3){1.0f, 1.0f, 1.0f}, RED);
-    obj->type = type;
-    break;
-  default:
-    break;
-  }
-
-  return obj;
-}
 __AC__ void updateObject(struct Object *const obj) {
   switch (obj->type) {
   case AC_PLANE_OBJECT:
     break;
   case AC_CUBE_OBJECT:
-    updateCube(obj->node, NULL);
+    updateCube(obj->node);
     break;
   default:
     break;

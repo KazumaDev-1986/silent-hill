@@ -2,13 +2,14 @@
 #include <stdlib.h>
 
 __AC__ void addElementList(struct List **list, void *value) {
-  if (list && *list) {
+  if (*list) {
     struct List *tmp = (*list);
     while (tmp->next) {
-      tmp->next = tmp->next;
+      tmp = tmp->next;
     }
 
     tmp->next = (struct List *)malloc(sizeof(struct List));
+    tmp->next->value = value;
     tmp->next->next = NULL;
 
   } else {

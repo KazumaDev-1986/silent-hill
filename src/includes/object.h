@@ -2,6 +2,7 @@
 #define __AC_OBJECT_H__
 
 #include "config.h"
+#include "objects/cube.h"
 #include "raylib.h"
 #include <stddef.h>
 
@@ -20,7 +21,9 @@ extern "C" {
 #endif
 
 // Object functions.
-__AC__ struct Object *createObject(enum ObjectType type);
+__AC__ struct Object *createCubeObject(Vector3 position, Vector3 size,
+                                       Color color,
+                                       void (*callback)(struct Cube *const));
 __AC__ void updateObject(struct Object *const obj);
 __AC__ void drawObject(const struct Object *const obj);
 __AC__ void destroyObject(struct Object **const ptr);

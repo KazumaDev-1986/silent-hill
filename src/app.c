@@ -31,6 +31,7 @@ __AC__ struct App *createApp(void) {
     return NULL;
   }
 
+  _initApp();
   app->live = true;
   app->currentScreen = createLevel0Screen();
   if (!app->currentScreen) {
@@ -39,7 +40,6 @@ __AC__ struct App *createApp(void) {
     return NULL;
   }
 
-  _initApp();
   return app;
 }
 
@@ -62,6 +62,7 @@ __AC__ void destroyApp(struct App **const ptr) {
 //----------------------------------------------------------------------------------
 __AC__ static void _initApp(void) {
   InitWindow(AC_WIDTH_SCREEN, AC_HEIGHT_SCREEN, AC_TITLE_SCREEN);
+  DisableCursor();
   SetTargetFPS(AC_FPS);
 }
 
