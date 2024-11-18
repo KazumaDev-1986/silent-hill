@@ -25,10 +25,10 @@ __AC__ static Camera *_createCamera(void);
 __AC__ static void _destroyCamera(Camera **const ptr);
 __AC__ static void _destroyAllObjects(struct List **const ptr);
 __AC__ static void _resetIntervalVariables(void);
+__AC__ static void _loadLevelObjects(struct List **ptr);
 
 __AC__ static void _drawPlane(const struct Plane *const plane);
-__AC__ static void _drawCube(const struct Cube *const cube);
-__AC__ static void _rotationCube(const struct Cube *const cube);
+__AC__ static void _updateCameraByPlayer(Vector3 position, Vector3 rotation);
 
 #if defined(__cplusplus)
 }
@@ -58,21 +58,7 @@ __AC__ struct Screen *createLevel0Screen(void) {
   screen->getNextScreenType = &_getNextScreenType;
 
   screen->objects = NULL;
-
-  addElementList(&screen->objects,
-                 createPlaneObject((Vector3){0.0f, 0.5f, 0.0f},
-                                   (Vector2){9.0f, 9.0f}, GREEN, NULL,
-                                   &_drawPlane));
-  addElementList(&screen->objects, createCubeObject((Vector3){0.0f, 1.0f, 0.0f},
-                                                    (Vector3){1.0f, 1.0f, 1.0f},
-                                                    RED, NULL, &_rotationCube));
-  addElementList(&screen->objects, createCubeObject((Vector3){2.0f, 1.0f, 0.0f},
-                                                    (Vector3){1.0f, 1.0f, 1.0f},
-                                                    BLUE, NULL, &_drawCube));
-  addElementList(&screen->objects,
-                 createCubeObject((Vector3){-2.0f, 1.0f, 0.0f},
-                                  (Vector3){1.0f, 1.0f, 1.0f}, YELLOW, NULL,
-                                  &_drawCube));
+  _loadLevelObjects(&screen->objects);
 
   return screen;
 }
@@ -88,12 +74,16 @@ __AC__ void destroyLevel0Screen(struct Screen **const ptr) {
 //----------------------------------------------------------------------------------
 // Internal function definition.
 //----------------------------------------------------------------------------------
+__AC__ static void _loadLevelObjects(struct List **ptr) {
+  addElementList(ptr, createPlaneObject((Vector3){0.0f, 0.5f, 0.0f},
+                                        (Vector2){9.0f, 9.0f}, GREEN, NULL,
+                                        &_drawPlane));
+
+  addElementList(ptr, createPlayerObject((Vector3){0.0f, 1.5f, 0.0f},
+                                         &_updateCameraByPlayer));
+}
+
 __AC__ static void _updateLevel0Screen(struct Screen *const screen) {
-
-  if (_camera) {
-    UpdateCamera(_camera, CAMERA_FIRST_PERSON);
-  }
-
   if (screen && screen->objects) {
     struct List *tmp = screen->objects;
     while (tmp) {
@@ -137,7 +127,7 @@ __AC__ static Camera *_createCamera(void) {
   }
 
   camera->fovy = 45.0f;
-  camera->position = (Vector3){10.0f, 2.0f, 0.0f};
+  camera->position = (Vector3){10.0f, 4.0f, 0.0f};
   camera->target = (Vector3){0};
   camera->up = (Vector3){0.0f, 1.0f, 0.0f};
   camera->projection = CAMERA_PERSPECTIVE;
@@ -167,23 +157,15 @@ __AC__ static void _resetIntervalVariables(void) {
 __AC__ static void _drawPlane(const struct Plane *const plane) {
   DrawPlane(plane->center, plane->size, plane->color);
 }
+__AC__ static void _updateCameraByPlayer(Vector3 position, Vector3 rotation) {
+  if (_camera) {
+    // Vector3 movement = (Vector3){
+    //     position.x + 10.0f,
+    //     _camera->position.y,
+    //     _camera->position.z,
+    // };
 
-__AC__ static void _drawCube(const struct Cube *const cube) {
-  DrawCubeV(cube->position, cube->size, cube->color);
-  DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
-}
-__AC__ static void _rotationCube(const struct Cube *const cube) {
-  static float angle = 0.0f;
-  if (angle > 360) {
-    angle = 0.0f;
-  } else {
-    angle += 1.0f;
+    // _camera->target = position;
+    // _camera->position = movement;
   }
-  rlPushMatrix();
-  rlRotatef(angle, 0.0f, 1.0f, 0.0f);
-
-  DrawCubeV(cube->position, cube->size, cube->color);
-  DrawCubeWiresV(cube->position, cube->size, DARKGRAY);
-
-  rlPopMatrix();
 }

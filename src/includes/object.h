@@ -7,10 +7,7 @@
 #include "raylib.h"
 #include <stddef.h>
 
-enum ObjectType {
-  AC_PLANE_OBJECT = 0,
-  AC_CUBE_OBJECT,
-};
+enum ObjectType { AC_PLANE_OBJECT = 0, AC_CUBE_OBJECT, AC_PLAYER_OBJECT };
 
 struct Object {
   void *node;
@@ -30,6 +27,10 @@ __AC__ struct Object *
 createPlaneObject(Vector3 center, Vector2 size, Color color,
                   void (*update)(struct Plane *const),
                   void (*draw)(const struct Plane *const));
+
+__AC__ struct Object *
+createPlayerObject(Vector3 position, void (*updateCamera)(Vector3, Vector3));
+
 __AC__ void updateObject(struct Object *const obj);
 __AC__ void drawObject(const struct Object *const obj);
 __AC__ void destroyObject(struct Object **const ptr);
