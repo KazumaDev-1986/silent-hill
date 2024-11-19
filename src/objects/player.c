@@ -68,6 +68,9 @@ __AC__ void drawPlayer(const struct Player *const player) {
   DrawCube((Vector3){0}, 1.0f, 1.5f, 1.0f, RAYWHITE);
   DrawCubeWires((Vector3){0}, 1.0f, 1.5f, 1.0f, DARKGRAY);
 
+  DrawCube((Vector3){0.5f, 0.75f, 0.0f}, 1.0f, 0.5f, 0.5f, RED);
+  DrawCubeWires((Vector3){0.5f, 0.75f, 0.0f}, 1.0f, 0.5f, 0.5f, DARKGRAY);
+
   rlPopMatrix();
 }
 __AC__ void destroyPlayer(struct Player **const ptr) {
