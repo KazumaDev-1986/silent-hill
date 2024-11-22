@@ -5,3 +5,4 @@ assets/
 *.o
 .DS_Store
 silent-hill
+silent-hill.exe
