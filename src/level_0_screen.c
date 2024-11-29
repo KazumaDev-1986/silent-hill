@@ -46,7 +46,7 @@ __AC__ struct Screen *createLevel0Screen(void) {
     return NULL;
   }
 
-  _camera = createCustomCamera((Vector3){-5.0f, 5.0f, 0.0f}, (Vector3) {0});
+  _camera = createCustomCamera((Vector3){-5.0f, 2.5f, 0.0f}, (Vector3) {0.0f, 1.5f, 0.0f});
   if (!_camera) {
     free(screen);
     screen = NULL;

@@ -1,12 +1,24 @@
 #include "includes/custom_camera.h"
 #include "includes/error.h"
+#include "includes/raylib.h"
+#include "includes/raymath.h"
 #include <stdlib.h>
 #include <math.h>
 
 //----------------------------------------------------------------------------------
 // Internal varables and function declaration.
 //----------------------------------------------------------------------------------
-static struct CustomCamera *_internalCustomCamera;
+static struct CustomCamera *_customCamera;
+static float _currentAngle = 0.0f;
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+#if defined(__cplusplus)
+}
+#endif
+
 
 //----------------------------------------------------------------------------------
 // Public function definition.
@@ -26,18 +38,22 @@ __AC__ struct CustomCamera *createCustomCamera(Vector3 position, Vector3 target)
   camera->data.target = target;  
   camera->data.projection = CAMERA_PERSPECTIVE;
 
-  _internalCustomCamera = camera;
+  _customCamera = camera;
 
   return camera;
 }
 __AC__ void updateCustomCamera(Vector3 position, Vector3 rotation)
 {
-  if (_internalCustomCamera)
-  {
-    _internalCustomCamera->data.target = position;
-    _internalCustomCamera->data.position.x = position.x - 5 * cosf(DEG2RAD * rotation.y);
-    _internalCustomCamera->data.position.z = position.z + 5 * sinf(DEG2RAD * rotation.y);
-  }
+  _customCamera->data.target.x = position.x;
+  _customCamera->data.target.y = position.y + 1.0f;
+  _customCamera->data.target.z = position.z;
+
+  _currentAngle = Lerp(_currentAngle, rotation.y, 0.1);
+  // TraceLog(LOG_INFO, TextFormat(">> _currentAngle: %.2f - _rotationY: %.2f", _currentAngle, rotation.y));
+
+  _customCamera->data.position.x = position.x - cosf(DEG2RAD * _currentAngle) * 5.0;
+  _customCamera->data.position.y = _customCamera->data.position.y;
+  _customCamera->data.position.z = position.z + sinf(DEG2RAD * _currentAngle) * 5.0;
 }
 __AC__ void destroyCustomCamera(struct CustomCamera **const ptr)
 {
@@ -45,10 +61,11 @@ __AC__ void destroyCustomCamera(struct CustomCamera **const ptr)
   {
     free(*ptr);
     *ptr = NULL;
-    _internalCustomCamera = NULL;
+    _customCamera = NULL;
   }
 }
 
 //----------------------------------------------------------------------------------
 // Internal function definition.
 //----------------------------------------------------------------------------------
+

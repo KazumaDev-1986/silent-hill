@@ -9,6 +9,7 @@
 //----------------------------------------------------------------------------------
 // static const char *MODEL_PATH = "data/models/lorena.m3d";
 static const float _VELOCITY = 0.05;
+static const float _ROTATION_VELOCITY = 2.0f;
 
 #if defined(__cplusplus)
 extern "C" {
@@ -44,16 +45,12 @@ __AC__ void updatePlayer(struct Player *const player) {
     player->position.z += sinf(DEG2RAD * player->rotation.y) * _VELOCITY;
   }
   if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-    player->rotation.y += 1.0f;
-    if (player->rotation.y > 360.0f) {
-      player->rotation.y = 0;
-    }
+    player->rotation.y += _ROTATION_VELOCITY;
   } else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-    player->rotation.y -= 1.0f;
-    if (player->rotation.y < 0) {
-      player->rotation.y = 360;
-    }
+    player->rotation.y -= _ROTATION_VELOCITY;
   }
+
+  // player->rotation.y = Clamp(player->rotation.y, 0.0f, 360.0f);
 
   if (player->updateCamera) {
     player->updateCamera(player->position, player->rotation);
