@@ -9,6 +9,11 @@ __AC__ struct Player {
   Vector3 rotation;
 
   void (*updateCamera)(Vector3, Vector3);
+
+  Model model;
+  Texture2D texture;
+
+  ModelAnimation *animations;
 };
 
 #if defined(__cplusplus)

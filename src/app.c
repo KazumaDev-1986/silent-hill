@@ -61,9 +61,11 @@ __AC__ void destroyApp(struct App **const ptr) {
 // Internal function definition.
 //----------------------------------------------------------------------------------
 __AC__ static void _initApp(void) {
+  SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(AC_WIDTH_SCREEN, AC_HEIGHT_SCREEN, AC_TITLE_SCREEN);
-  DisableCursor();
+  // DisableCursor();
   SetTargetFPS(AC_FPS);
+  // ToggleFullscreen();
 }
 
 __AC__ static void _destroyApp(struct App *const app) {

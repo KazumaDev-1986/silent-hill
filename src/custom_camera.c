@@ -45,15 +45,14 @@ __AC__ struct CustomCamera *createCustomCamera(Vector3 position, Vector3 target)
 __AC__ void updateCustomCamera(Vector3 position, Vector3 rotation)
 {
   _customCamera->data.target.x = position.x;
-  _customCamera->data.target.y = position.y + 1.0f;
+  _customCamera->data.target.y = position.y + 0.5f;
   _customCamera->data.target.z = position.z;
 
-  _currentAngle = Lerp(_currentAngle, rotation.y, 0.1);
-  // TraceLog(LOG_INFO, TextFormat(">> _currentAngle: %.2f - _rotationY: %.2f", _currentAngle, rotation.y));
+  _currentAngle = Lerp(_currentAngle, rotation.y, 0.09f);
 
-  _customCamera->data.position.x = position.x - cosf(DEG2RAD * _currentAngle) * 5.0;
+  _customCamera->data.position.x = position.x + cosf(DEG2RAD * _currentAngle) * 3.0;
   _customCamera->data.position.y = _customCamera->data.position.y;
-  _customCamera->data.position.z = position.z + sinf(DEG2RAD * _currentAngle) * 5.0;
+  _customCamera->data.position.z = position.z - sinf(DEG2RAD * _currentAngle) * 3.0;
 }
 __AC__ void destroyCustomCamera(struct CustomCamera **const ptr)
 {
