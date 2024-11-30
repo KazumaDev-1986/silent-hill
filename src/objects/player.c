@@ -88,10 +88,10 @@ __AC__ void drawPlayer(const struct Player *const player) {
     _rotationAngle = Lerp(_rotationAngle, player->rotation.y, 0.3f);
   }
 
-  // DrawModelEx(player->model, player->position, (Vector3){0.0f, 1.0f, 0},
-  //             _rotationAngle - 90.0f, (Vector3){1.0f, 1.0f, 1.0f}, RAYWHITE);
-  DrawModelWiresEx(player->model, player->position, (Vector3){0.0f, 1.0f, 0},
+  DrawModelEx(player->model, player->position, (Vector3){0.0f, 1.0f, 0},
               _rotationAngle - 90.0f, (Vector3){1.0f, 1.0f, 1.0f}, RAYWHITE);
+  // DrawModelWiresEx(player->model, player->position, (Vector3){0.0f, 1.0f, 0},
+  //             _rotationAngle - 90.0f, (Vector3){1.0f, 1.0f, 1.0f}, RAYWHITE);
 }
 __AC__ void destroyPlayer(struct Player **const ptr) {
   if (ptr && *ptr) {
