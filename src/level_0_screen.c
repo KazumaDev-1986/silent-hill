@@ -6,7 +6,6 @@
 #include "includes/rlgl.h"
 #include "includes/screen.h"
 #include "includes/utils.h"
-#include <math.h>
 #include <stdlib.h>
 
 //------NULL--------------------------------------------------------------
@@ -30,7 +29,6 @@ __AC__ static void _loadLevelObjects(struct List **ptr);
 
 __AC__ static void _drawPlane(const struct Plane *const plane);
 
-
 #if defined(__cplusplus)
 }
 #endif
@@ -46,7 +44,8 @@ __AC__ struct Screen *createLevel0Screen(void) {
     return NULL;
   }
 
-  _camera = createCustomCamera((Vector3){0.0f, 2.5f, -5.0f}, (Vector3) {0.0f, 1.5f, 0.0f});
+  _camera = createCustomCamera((Vector3){0.0f, 2.5f, -5.0f},
+                               (Vector3){0.0f, 1.5f, 0.0f});
   if (!_camera) {
     free(screen);
     screen = NULL;
@@ -102,10 +101,10 @@ __AC__ static void _drawLevel0Screen(const struct Screen *const screen) {
     DrawGrid(50, 1.0f);
 
     // Pivot
-    DrawLine3D((Vector3){0},(Vector3){10.0f, 0.0f, 0.0f}, RED);
-    DrawLine3D((Vector3){0},(Vector3){0.0f, 10.0f, 0.0f}, GREEN);
-    DrawLine3D((Vector3){0},(Vector3){0.0f, 0.0f, 10.0f}, BLUE);
-    
+    DrawLine3D((Vector3){0}, (Vector3){10.0f, 0.0f, 0.0f}, RED);
+    DrawLine3D((Vector3){0}, (Vector3){0.0f, 10.0f, 0.0f}, GREEN);
+    DrawLine3D((Vector3){0}, (Vector3){0.0f, 0.0f, 10.0f}, BLUE);
+
     if (screen && screen->objects) {
       struct List *tmp = screen->objects;
       while (tmp) {
@@ -141,5 +140,3 @@ __AC__ static void _resetIntervalVariables(void) {
 __AC__ static void _drawPlane(const struct Plane *const plane) {
   DrawPlane(plane->center, plane->size, plane->color);
 }
-
-
