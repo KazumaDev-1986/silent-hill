@@ -3,17 +3,15 @@
 
 #include "../config.h"
 #include "../raylib.h"
+#include "../animation_player.h"
 
 __AC__ struct Player {
   Vector3 position;
   Vector3 rotation;
-
-  void (*updateCamera)(Vector3, Vector3);
-
   Model model;
   Texture2D texture;
-
-  ModelAnimation *animations;
+  struct AnimationPlayer *ap;
+  void (*updateCamera)(Vector3, Vector3);
 };
 
 #if defined(__cplusplus)
